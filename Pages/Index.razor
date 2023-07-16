@@ -1,0 +1,7 @@
+﻿@using Roulette.Messages.SlotPageMessage
+@using Roulette.Messages.AppMessage
+@using TEA;
+
+<SlotPage
+    Dispatcher="@(Dispatcher.Wrap<ISlotPageMessage, IAppMessage>(msg => new SlotPageMessageInApp(msg)))"
+    State="@(State.SlotPage)" />

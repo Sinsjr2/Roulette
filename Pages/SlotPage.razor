@@ -1,0 +1,109 @@
+@using Roulette.Models
+@using Roulette.Messages.SlotPageMessage
+@using TEA;
+
+<div>
+    <style>
+     * {
+         box-sizing: border-box;
+     }
+
+     .slots {
+         float: left;
+         width: 48px;
+         height: 94px;
+         border: 2px solid;
+         overflow: hidden;
+     }
+
+     .slots .wrapper {
+         width: 46px;
+     }
+
+     .slots .wrapper .slot {
+         width: 46px;
+         height: 30px;
+         text-align: center;
+         padding-top: 2px;
+     }
+
+     .fadeUp{
+         animation-name:fadeUpAnime;
+         animation-duration:2s;
+         animation-iteration-count: infinite;
+         animation-fill-mode:forwards;
+         animation-timing-function: linear;
+     }
+
+     @@keyframes fadeUpAnime{
+         from {
+             transform: translateY(-200px);
+         }
+         to {
+             transform: translateY(0px);
+         }
+     }
+    </style>
+
+    <div>
+        @{
+            var slots = State.ConvertToDigitsList()
+                .Zip(State.SlotsRunningStatus, (slot, isRunning) => (slot, isRunning));
+            foreach (var t in slots.Reverse()) {
+                CreateSlot(t.slot, t.isRunning);
+            }
+        }
+    </div>
+
+    <input type="button"
+           value="抽選開始"
+           onclick="@(() => Dispatcher.Dispatch(Singleton<OnClickStart>.Instance))" />
+
+    <div>
+        <span>当選者</span>
+        <ul>
+            @foreach (var winner in State.Winners) {
+                <li type="circle">
+                    <span>@(winner.Number)</span>
+                    <span>@(winner.DisplayName)</span>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div>
+        <span>抽選対象</span>
+        <InputFile OnChange="LoadFile"/>
+        <ul>
+            @foreach (var number in State.OriginalCandidateNumbers) {
+                <li type="circle">
+                    <span>@(number.Number)</span>
+                    <span>@(number.DisplayName)</span>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+@{
+    void CreateSlot(IEnumerable<char> numbers, bool isRunning) {
+        var attr = isRunning ? " fadeUp" : "";
+        <div class="slots">
+          <div class="wrapper @(attr)">
+            @foreach (var number in numbers) {
+              <div>@(number)</div>
+            }
+          </div>
+        </div>
+    }
+
+    async Task LoadFile(InputFileChangeEventArgs e) {
+        var file = e.GetMultipleFiles(1)[0];
+        using var reader = new StreamReader(file.OpenReadStream());
+        var body = await reader.ReadToEndAsync();
+        if (body is null) {
+            return;
+        }
+        Dispatcher.Dispatch(new OnLoadCSVFile(body));
+    }
+}
