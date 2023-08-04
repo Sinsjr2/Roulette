@@ -76,14 +76,17 @@
     <div>
         <span>抽選対象</span>
         <InputFile OnChange="LoadFile"/>
-        <ul>
-            @foreach (var number in State.OriginalCandidateNumbers) {
-                <li type="circle">
-                    <span>@(number.Number)</span>
-                    <span>@(number.DisplayName)</span>
-                </li>
-            }
-        </ul>
+        <details>
+            <summary>候補</summary>
+            <ul>
+                @foreach (var number in State.OriginalCandidateNumbers) {
+                    <li type="circle">
+                        <span>@(number.Number)</span>
+                        <span>@(number.DisplayName)</span>
+                    </li>
+                }
+            </ul>
+        </details>
     </div>
 </div>
 
