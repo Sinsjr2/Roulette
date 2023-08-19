@@ -57,15 +57,14 @@
 
     <input type="number" @oninput="OnChange" />
 
-    <div style="overflow: hidden; position: relative; height:@(DisplayHeightPX)px; border: 2px solid green;">
-        @{
-            int i = 0;
-        }
-        @foreach (var (pos, content) in SlotPositionAndContents) {
-            <div style="position:absolute; top: @(pos)px;" >
-                @* @for (int j = 0; j < 10; i++, j++) { *@
-                    <label style="margin: 5px; font-size: @(this.ElementHeight)px;">@content</label>
-                @* } *@
+    <div style="display: flex;">
+        @foreach (var (slot, pos) in this.slots.Zip(roulettePositions, (slot, pos) => (slot, pos))) {
+            <div style="width:100px; overflow: hidden; position: relative; height:@(slot.DisplayHeightPX)px; border: 2px solid green;">
+                @foreach (var (rotatePos, content) in slot.GetNewPosition(pos)) {
+                    <div style="position:absolute; top: @(rotatePos)px;" >
+                        <div style="margin: 5px; font-size: @(slot.ElementHeight)px;">@content</div>
+                    </div>
+                }
             </div>
         }
     </div>
