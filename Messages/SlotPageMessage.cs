@@ -1,3 +1,5 @@
+using Roulette.Models;
+
 namespace Roulette.Messages.SlotPageMessage {
 
     public interface ISlotPageMessage { }
@@ -18,6 +20,11 @@ namespace Roulette.Messages.SlotPageMessage {
     /// すべてのスロットが止まっており、とめる番号がない場合は、何もしません。
     /// </summary>
     public record OnStopSlot : ISlotPageMessage;
+
+    /// <summary>
+    /// 当選者を追加します。
+    /// </summary>
+    public record AddWinner(LotteryNumber Winner) : ISlotPageMessage;
 
     /// <summary>
     /// 抽選をするためにスロットの動作を開始します。

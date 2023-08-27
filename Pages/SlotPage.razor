@@ -37,21 +37,23 @@
 
      @@keyframes fadeUpAnime{
          from {
-             transform: translateY(-200px);
+             transform: translateY(0px);
          }
          to {
-             transform: translateY(0px);
+             transform: translateY(200px);
          }
      }
     </style>
 
-    <div>
-        @{
-            var slots = State.ConvertToDigitsList()
-                .Zip(State.SlotsRunningStatus, (slot, isRunning) => (slot, isRunning));
-            foreach (var t in slots.Reverse()) {
-                CreateSlot(t.slot, t.isRunning);
-            }
+    <div style="display: flex;">
+        @foreach (var (slot, pos) in this.slots.Zip(roulettePositions, (slot, pos) => (slot, pos))) {
+            <div style="width:100px; overflow: hidden; position: relative; height:@(slot.DisplayHeightPX)px; border: 2px solid green;">
+                @foreach (var (rotatePos, content) in slot.GetNewPosition(pos)) {
+                    <div style="position:absolute; top: @(rotatePos)px;" >
+                        <div style="margin: 5px; font-size: @(slot.ElementHeight)px;">@content</div>
+                    </div>
+                }
+            </div>
         }
     </div>
 
@@ -74,18 +76,22 @@
     <div>
         <span>抽選対象</span>
         <InputFile OnChange="LoadFile"/>
-        <ul>
-            @foreach (var number in State.OriginalCandidateNumbers) {
-                <li type="circle">
-                    <span>@(number.Number)</span>
-                    <span>@(number.DisplayName)</span>
-                </li>
-            }
-        </ul>
+        <details>
+            <summary>候補</summary>
+            <ul>
+                @foreach (var number in State.OriginalCandidateNumbers) {
+                    <li type="circle">
+                        <span>@(number.Number)</span>
+                        <span>@(number.DisplayName)</span>
+                    </li>
+                }
+            </ul>
+        </details>
     </div>
 </div>
 
 @{
+
     void CreateSlot(IEnumerable<char> numbers, bool isRunning) {
         var attr = isRunning ? " fadeUp" : "";
         <div class="slots">

@@ -12,6 +12,7 @@ internal class Program {
         var initial =
             new AppModel(
                 new SlotPageModel(
+                    30,
                     new LotteryNumber[] { },
                     new char[] { }));
 
