@@ -59,7 +59,7 @@ namespace Roulette.Models {
         /// <summary>
         /// 抽選の結果止める番号
         /// </summary>
-        LotteryNumber? TargetLotteryNumber { get; init; }
+        public LotteryNumber? TargetLotteryNumber { get; private init; }
 
         /// <summary>
         /// 抽選中でルーレットが回転しているかどうか

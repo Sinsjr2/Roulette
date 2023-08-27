@@ -62,7 +62,10 @@ namespace Roulette.Pages {
                 var random = new Random();
                 var candidateNumbers = State.CandidateNumbers.ToArray();
 
-                var winner = candidateNumbers[2];
+                var winner = State.TargetLotteryNumber;
+                if (winner is null) {
+                    return;
+                }
 
                 var targetPositions = LotteryUtil.CreateTargetPositions(
                     random,
