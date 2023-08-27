@@ -45,18 +45,6 @@
      }
     </style>
 
-    <div>
-        @{
-            var slots = State.ConvertToDigitsList()
-                .Zip(State.SlotsRunningStatus, (slot, isRunning) => (slot, isRunning));
-            foreach (var t in slots.Reverse()) {
-                CreateSlot(t.slot, t.isRunning);
-            }
-        }
-    </div>
-
-    <input type="number" @oninput="OnChange" />
-
     <div style="display: flex;">
         @foreach (var (slot, pos) in this.slots.Zip(roulettePositions, (slot, pos) => (slot, pos))) {
             <div style="width:100px; overflow: hidden; position: relative; height:@(slot.DisplayHeightPX)px; border: 2px solid green;">

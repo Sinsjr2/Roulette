@@ -17,33 +17,10 @@ namespace Roulette.Pages {
         /// <summary>
         /// スロット1つを表します。
         /// </summary>
-        readonly IReadOnlyList<SlotModel> slots;
-
-        /// <summary>
-        /// スロットに表示する要素
-        /// </summary>
-        readonly IReadOnlyList<string> slotElements = new[] {
-            "1", "5", "20", "100", "111"
-        };
+        IReadOnlyList<SlotModel> slots;
 
         public SlotPage() {
-            var random = new Random();
-
-            // ルーレットが何回回転するか
-            var finalSlotItemPositions = new[] {
-                4, 20, 10
-            };
-
-            slots = finalSlotItemPositions.Select(
-                pos => new SlotModel(
-                    elementHeight: 30,
-                    targetPositions: SlotModel.RandomStopPositions(
-                        random,
-                        elementHeight: 30,
-                        slotRotateMaxSpeed: 150, 0, 2, 5, pos).ToArray(),
-                    slotElements)
-            ).ToArray();
-
+            slots = Enumerable.Repeat(new SlotModel(SlotPageModel.Default.ElementHeight, new[] { (0, 0) }, new[] { "0" }), 4).ToArray();
             roulettePositions = Enumerable.Repeat(0, slots.Count);
         }
 
@@ -57,15 +34,49 @@ namespace Roulette.Pages {
         [ParameterAttribute]
         public IDispatcher<ISlotPageMessage> Dispatcher { get; set; } = new BufferDispatcher<ISlotPageMessage>();
 
+        SlotPageModel state = SlotPageModel.Default;
+
+        ValueTask slotAnimationTask;
+
         [ParameterAttribute]
-        public SlotPageModel State { get; set; } = SlotPageModel.Default;
+        public SlotPageModel State
+        {
+            get => state;
+            set
+            {
+                var prevState = state;
+                state = value;
+                if (!slotAnimationTask.IsCompleted || !state.IsRunningSlot) {
+                    return;
+                }
+                slotAnimationTask = StartAnimation();
+            }
+        }
 
         protected override void OnInitialized() {
-            InvokeAsync(() => StartAnimation().AsTask());
+             InvokeAsync(() => StartAnimation().AsTask());
         }
 
         async ValueTask StartAnimation() {
             try {
+                var random = new Random();
+                var candidateNumbers = State.CandidateNumbers.ToArray();
+
+                var winner = candidateNumbers[2];
+
+                var targetPositions = LotteryUtil.CreateTargetPositions(
+                    random,
+                    elementHeight: State.ElementHeight,
+                    slotRotateMaxSpeed: 150, 0, 2, 5,
+                    minCountOfRotation: 10,
+                    maxCountOfRotation: 20,
+                    displayHeight: State.ElementHeight * 3,
+                    candidateNumbers,
+                    winner);
+
+                slots = targetPositions.slotsContent
+                    .Zip(targetPositions.targetPositions, (slot, positions) => new SlotModel(State.ElementHeight, positions, slot)).ToArray();
+
                 await Task.Delay(100);
                 var stopwatch = Stopwatch.StartNew();
                 while (true) {
@@ -74,10 +85,11 @@ namespace Roulette.Pages {
                     this.StateHasChanged();
                     var isCompleted = slots.All(slot => slot.GetFinalTime() <= elapsedTime);
                     if (isCompleted) {
-                        return;
+                        break;
                     }
                     await Task.Delay(30);
                 }
+                Dispatcher.Dispatch(new AddWinner(winner));
             }
              catch (Exception ex) {
                 Console.Error.WriteLine(ex.ToString());

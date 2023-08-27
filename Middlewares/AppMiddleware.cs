@@ -1,6 +1,7 @@
 using Roulette.Messages.AppMessage;
 using Roulette.Messages.SlotPageMessage;
 using Roulette.Models;
+using System.Diagnostics;
 using TEA;
 
 namespace Roulette.Middlewares {
@@ -16,18 +17,18 @@ namespace Roulette.Middlewares {
             this.random = random;
         }
 
-        async ValueTask StartSlot() {
+        void StartSlot() {
             slotPageDispatcher.Dispatch(new OnStartSlot(random.NextDouble()));
-            while (tea.Current.SlotPage.IsRunningSlot) {
-                await Task.Delay(TimeSpan.FromSeconds(1.0));
-                slotPageDispatcher.Dispatch(Singleton<OnStopSlot>.Instance);
-            }
+            // while (tea.Current.SlotPage.IsRunningSlot) {
+            //     await Task.Delay(TimeSpan.FromSeconds(1.0));
+            //     slotPageDispatcher.Dispatch(Singleton<OnStopSlot>.Instance);
+            // }
         }
 
         public void Dispatch(IAppMessage msg) {
             switch (msg) {
                 case SlotPageMessageInApp(var msg2) when msg2 is OnClickStart:
-                    _ = StartSlot();
+                    StartSlot();
                     break;
                 default:
                     tea.Dispatch(msg);

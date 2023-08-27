@@ -46,7 +46,7 @@ namespace Roulette.Models {
         /// <summary>
         /// 当選者を除いた抽選対象の番号
         /// </summary>
-        IEnumerable<LotteryNumber> CandidateNumbers =>
+        public IEnumerable<LotteryNumber> CandidateNumbers =>
             OriginalCandidateNumbers
             .Where(number => !Winners.Any(winner => winner.Number == number.Number));
 
@@ -73,6 +73,11 @@ namespace Roulette.Models {
         public IReadOnlyList<LotteryNumber> Winners { get; private init; } = Array.Empty<LotteryNumber>();
 
         /// <summary>
+        /// スロット1つを表します。
+        /// </summary>
+        public IReadOnlyList<SlotModel> Slots { get; private init; }
+
+        /// <summary>
         /// 現在回転しているスロットはtrue、停止しているスロットはfalseを返します。
         /// </summary>
         public IEnumerable<bool> SlotsRunningStatus {
@@ -89,16 +94,25 @@ namespace Roulette.Models {
             }
         }
 
+        /// <summary>
+        /// スロットの1要素当たりの高さ
+        /// </summary>
+        public int ElementHeight { get; private set; }
+
         public static readonly SlotPageModel Default = new();
 
         private SlotPageModel() {
             OriginalCandidateNumbers = Array.Empty<LotteryNumber>();
             DecidedNumbers = Array.Empty<char>();
+            ElementHeight = 30;
+            Slots = Array.Empty<SlotModel>();
         }
 
-        public SlotPageModel(IReadOnlyList<LotteryNumber> candidateNumbers, IReadOnlyList<char> decidedNumbers) {
+        public SlotPageModel(int elementHeight, IReadOnlyList<LotteryNumber> candidateNumbers, IReadOnlyList<char> decidedNumbers) {
+            ElementHeight = elementHeight;
             OriginalCandidateNumbers = candidateNumbers;
             DecidedNumbers = decidedNumbers;
+            Slots = Array.Empty<SlotModel>();
         }
 
         /// <summary>
@@ -223,19 +237,20 @@ namespace Roulette.Models {
                         reader.TryGetField(1, out string? name) ? (name ?? "") : ""));
             }
 
+            var numbersMaxLength = numbers.Select(x => x.Number.Length).Max();
             return this with {
-                OriginalCandidateNumbers = numbers.ToArray(),
+                OriginalCandidateNumbers = numbers.Select(x => new LotteryNumber(x.Number.PadLeft(numbersMaxLength), x.DisplayName)).ToArray(),
                 IsRunningSlot = false,
                 TargetLotteryNumber = null,
                 DecidedNumbers = Array.Empty<char>(),
                 Winners = Array.Empty<LotteryNumber>()
-
             };
         }
 
         public SlotPageModel Update(ISlotPageMessage message) {
             return message switch {
                 OnStopSlotWithNumber msg => AddDecidedNumber(msg.Number),
+                    AddWinner(var winner) => this with { Winners = Winners.Append(winner).ToArray(), IsRunningSlot = false },
                 OnStartSlot(var randomNum) => SelectRandomNumberAndStart(randomNum),
                 OnStopSlot => StopNextSlot(),
                 OnClickStart => this,
