@@ -7,13 +7,6 @@ namespace Roulette.Models {
     /// </summary>
     public class LotteryUtil {
 
-        // /// <summary>
-        // /// 抽選対象の番号
-        // /// 全件数
-        // /// </summary>
-        // IReadOnlyList<LotteryNumber> OriginalCandidateNumbers { get; private init; }
-
-
         /// <summary>
         /// 対象の値が検索対象の値から始まっていることを判定します。
         /// 対象の番号の方が検索対象の値のリストよりも短い場合はfalseになります。
@@ -23,15 +16,6 @@ namespace Roulette.Models {
             using var it = target.GetEnumerator();
             return search.All(x => it.MoveNext() && comp.Equals(it.Current, x));
         }
-
-
-        // /// <summary>
-        // /// 当選者を除いた抽選対象の番号
-        // /// </summary>
-        // IEnumerable<LotteryNumber> GetCandidateNumbers() =>
-        //     OriginalCandidateNumbers
-        //     .Where(number => !Winners.Any(winner => winner.Number == number.Number));
-
 
         /// <summary>
         /// 現在確定している番号から導きだされる候補
@@ -113,17 +97,7 @@ namespace Roulette.Models {
                 .Select(_ => random.Next(minCountOfRotation, maxCountOfRotation))
                 .ToArray();
 
-            // // 各桁のスロットごとのとまる位置
-            // var finalStopPositions = countsOfRotation.Select(rotation => )
-
             var winnerNumbers = winner.SplitNumbers().ToArray();
-            // var slotsList = MoreLinq.MoreEnumerable.Scan(
-            //     Enumerable.Range(0, maxNumberLength)
-            //     .Select(i => (slots: ConvertToDigitsList(candidateNumbers, winnerNumbers.Take(i).ToArray()), i)),
-            //     // 確定した桁のスロットは最後の候補をスロットに表示する
-            //     (prev, candidate) => (prev.slots.Take(candidate.i).Concat(candidate.slots.Skip(candidate.i)).ToArray(), candidate.i))
-            //     // 1桁づつ止めていくため、その桁以上のスロットは同じ候補を表示するようにする
-            //     .Select(candidate => candidate.slots.Select((slot, j) => j < candidate.i slot));
 
             var slotsList =
                 Enumerable.Range(0, maxNumberLength)
@@ -168,4 +142,3 @@ namespace Roulette.Models {
     }
 
 }
-
