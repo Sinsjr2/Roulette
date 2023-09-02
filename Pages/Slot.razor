@@ -1,0 +1,87 @@
+﻿@using Roulette.Messages.SlotPageMessage;
+@using Roulette.Models;
+@using TEA;
+
+<div id="full-zone">
+    <div id="slot-zone">
+        <div id="reel-zone">
+            @foreach (var (slot, pos) in this.slots.Zip(roulettePositions, (slot, pos) => (slot, pos)))
+            {
+                <div class="each-reel">
+                    <div class="svg-wrap">
+                        <svg viewBox="0 0 42 @slot.DisplayHeightPX"
+                             class="svg-content"
+                             preserveAspectRatio="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            @foreach (var (rotatePos, content) in slot.GetNewPosition(pos))
+                            {   // blazorのバグ https://github.com/dotnet/aspnetcore/issues/11316
+                                <text>
+                                    <text x="5" y="@(rotatePos * 1.75 + 16)" font-family="fantasy" font-size="@(slot.ElementHeight + 30)">
+                                        @content
+                                    </text>
+                                </text>
+                            }
+                        </svg>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div id="winner-zone">
+        @if (State.Winners.Any())
+        {
+            <marquee scrollamount="20">
+                <span>当選者：</span>
+                @foreach (var winner in State.Winners)
+                {
+                    <span>@winner.Number</span>
+                    <span>@winner.DisplayName さん</span>
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                }
+            </marquee>
+        }
+    </div>
+</div>
+<div id="button-zone">
+    <button @onclick="() => Dispatcher.Dispatch(Singleton<OnClickStart>.Instance)">抽選開始</button>
+    <div class="input-file">
+        <InputFile OnChange="LoadFile" />
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IDispatcher<ISlotPageMessage> Dispatcher { get; set; } = new BufferDispatcher<ISlotPageMessage>();
+    SlotPageModel state = SlotPageModel.Default;
+    ValueTask slotAnimationTask;
+    [Parameter]
+    public SlotPageModel State
+    {
+        get => state;
+        set
+        {
+            var prevState = state;
+            state = value;
+            if (!slotAnimationTask.IsCompleted || !state.IsRunningSlot)
+            {
+                return;
+            }
+            slotAnimationTask = StartAnimation();
+        }
+    }
+
+    async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        var file = e.GetMultipleFiles(1)[0];
+        using var reader = new StreamReader(file.OpenReadStream());
+        var body = await reader.ReadToEndAsync();
+        if (body is null)
+        {
+            return;
+        }
+        Dispatcher.Dispatch(new OnLoadCSVFile(body));
+    }
+}
