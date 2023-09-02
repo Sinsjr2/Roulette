@@ -99,6 +99,8 @@ namespace Roulette.Models {
         /// </summary>
         public int ElementHeight { get; private set; }
 
+        public bool VisibleCandidates { get; private init; } = false;
+
         public static readonly SlotPageModel Default = new();
 
         private SlotPageModel() {
@@ -255,6 +257,8 @@ namespace Roulette.Models {
                 OnStopSlot => StopNextSlot(),
                 OnClickStart => this,
                 OnLoadCSVFile(var csvText) => SetCandidateNumbersFromCSVText(csvText),
+                OnClickOpenCandidates => this with { VisibleCandidates = true },
+                OnClickCoverClose => this with { VisibleCandidates = false },
                 _ => throw new ArgumentException(message?.ToString())
             };
         }

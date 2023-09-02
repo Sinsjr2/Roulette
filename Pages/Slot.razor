@@ -47,10 +47,36 @@
 </div>
 <div id="button-zone">
     <button @onclick="() => Dispatcher.Dispatch(Singleton<OnClickStart>.Instance)">抽選開始</button>
+    <button @onclick="() => Dispatcher.Dispatch(Singleton<OnClickOpenCandidates>.Instance)">候補者確認</button>
     <div class="input-file">
         <InputFile OnChange="LoadFile" />
     </div>
 </div>
+@if(State.VisibleCandidates)
+{
+    <div class="cover-zone" @onclick="() => Dispatcher.Dispatch(Singleton<OnClickCoverClose>.Instance)">
+        <div id="candidate-zone">
+            <h3>候補者一覧</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var number in State.OriginalCandidateNumbers)
+                    {
+                        <tr>
+                            <td class="table-numvber">@number.Number</td>
+                            <td>@number.DisplayName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
 
 @code {
     [Parameter]

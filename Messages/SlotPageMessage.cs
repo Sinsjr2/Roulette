@@ -37,4 +37,14 @@ namespace Roulette.Messages.SlotPageMessage {
     /// 抽選開始ボタンが押されたことを通知します。
     /// </summary>
     public record OnClickStart : ISlotPageMessage;
+
+    /// <summary>
+    /// 候補者を表示します
+    /// </summary>
+    public record OnClickOpenCandidates : ISlotPageMessage;
+
+    /// <summary>
+    /// 全画面表示を閉じます
+    /// </summary>
+    public record OnClickCoverClose : ISlotPageMessage;
 }

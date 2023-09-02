@@ -98,3 +98,46 @@
     #button-zone .input-file {
         background-color: white;
     }
+
+.cover-zone {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: flex-end;
+}
+
+#candidate-zone {
+    width: 500px;
+    max-width: 80%;
+    height: calc(100% - 50px);
+    background-color: white;
+    padding: 25px;
+    overflow: scroll;
+}
+
+    #candidate-zone table {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+    }
+
+        #candidate-zone table .table-numvber {
+            text-align: center;
+        }
+
+    #candidate-zone th {
+        background: #ccc;
+    }
+
+    #candidate-zone th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+    }
+
+    #candidate-zone tr:nth-child(even) {
+        background: #efefef;
+    }
