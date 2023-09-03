@@ -239,9 +239,8 @@ namespace Roulette.Models {
                         reader.TryGetField(1, out string? name) ? (name ?? "") : ""));
             }
 
-            var numbersMaxLength = numbers.Select(x => x.Number.Length).Max();
             return this with {
-                OriginalCandidateNumbers = numbers.Select(x => new LotteryNumber(x.Number.PadLeft(numbersMaxLength), x.DisplayName)).ToArray(),
+                OriginalCandidateNumbers = numbers.Select(x => new LotteryNumber(x.Number, x.DisplayName)).ToArray(),
                 IsRunningSlot = false,
                 TargetLotteryNumber = null,
                 DecidedNumbers = Array.Empty<char>(),
