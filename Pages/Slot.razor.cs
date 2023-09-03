@@ -22,11 +22,6 @@ namespace Roulette.Pages
             roulettePositions = Enumerable.Repeat(0, slots.Count);
         }
 
-        protected override void OnInitialized()
-        {
-            InvokeAsync(() => StartAnimation().AsTask());
-        }
-
         async ValueTask StartAnimation()
         {
             try
@@ -40,15 +35,18 @@ namespace Roulette.Pages
                     return;
                 }
 
-                var targetPositions = LotteryUtil.CreateTargetPositions(
+                var targetPositions = LotterySerialCandidate.CreateTargetPositions(
                     random,
                     elementHeight: State.ElementHeight,
-                    slotRotateMaxSpeed: 150, 0, 2, 5,
-                    minCountOfRotation: 10,
+                    slotRotateMaxSpeed: 250, 0, 1, 10,
+                    minCountOfRotation: 3,
                     maxCountOfRotation: 20,
                     displayHeight: State.ElementHeight * 3,
+                    State.OriginalCandidateNumbers,
                     candidateNumbers,
-                    winner);
+                    winner,
+                    "0123456789",
+                    "0");
 
                 slots = targetPositions.slotsContent
                     .Zip(targetPositions.targetPositions, (slot, positions) => new SlotModel(State.ElementHeight, positions, slot)).ToArray();
