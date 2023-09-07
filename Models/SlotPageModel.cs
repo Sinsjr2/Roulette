@@ -105,7 +105,14 @@ namespace Roulette.Models {
         /// </summary>
         public int ElementHeight { get; private set; }
 
+        /// <summary>
+        /// 候補者一覧の表示非表示
+        /// </summary>
         public bool VisibleCandidates { get; private init; } = false;
+        /// <summary>
+        /// 当選者一覧の表示非表示
+        /// </summary>
+        public bool VisibleWinners { get; private set; } = false;
 
         public static readonly SlotPageModel Default = new();
 
@@ -263,7 +270,8 @@ namespace Roulette.Models {
                 OnClickStart => this with { LatestWinner = null },
                 OnLoadCSVFile(var csvText) => SetCandidateNumbersFromCSVText(csvText),
                 OnClickOpenCandidates => this with { VisibleCandidates = true },
-                OnClickCoverClose => this with { VisibleCandidates = false },
+                OnClickOpenWinners => this with { VisibleWinners = true },
+                OnClickCoverClose => this with { VisibleCandidates = false, VisibleWinners = false },
                 _ => throw new ArgumentException(message?.ToString())
             };
         }
