@@ -26,9 +26,9 @@ namespace Roulette.Middlewares {
                     StartSlot();
                     break;
                 default:
-                    tea.Dispatch(msg);
                     break;
             }
+            tea.Dispatch(msg);
         }
 
     }
