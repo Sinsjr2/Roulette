@@ -1,4 +1,19 @@
-﻿#full-zone {
+﻿button {
+    display: block;
+    padding: 15px;
+    margin: 0 20px 20px 0;
+    text-align: center;
+    color: black;
+    text-decoration: none;
+    font-size: 20px;
+    background-color: lightgray;
+    border-radius: 100px;
+    border: none;
+    box-shadow: 0px 0px 50px lightgray;
+    cursor: pointer;
+}
+
+#full-zone {
     position: absolute;
     left: 0;
     top: 0;
@@ -59,17 +74,33 @@
     display: flex;
     align-items: center;
     background-color: black;
+    justify-content: center;
 }
-
-    #winner-zone marquee {
-        height: fit-content;
-    }
 
     #winner-zone span {
         color: white;
-        font-size: 70px;
+        font-size: 85px;
         margin-inline-end: 10px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-weight: bold;
+        animation-name: flash;
+        animation-duration: 1s;
+        animation-iteration-count: 3;
     }
+
+@keyframes flash {
+    0%, 50%, 100% {
+        opacity: 0;
+    }
+
+    35% {
+        opacity: 1;
+    }
+
+    65% {
+        opacity: 1;
+    }
+}
 
 #button-zone {
     position: absolute;
@@ -77,26 +108,23 @@
     bottom: 0;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
 }
 
-    #button-zone button {
-        display: block;
+    #button-zone > button {
         width: 200px;
-        padding: 15px;
-        margin: 0 20px 20px 0;
-        text-align: center;
-        color: black;
-        text-decoration: none;
-        font-size: 20px;
-        background-color: lightgray;
-        border-radius: 100px;
-        border: none;
-        box-shadow: 0px 0px 50px lightgray;
-        cursor: pointer;
     }
 
     #button-zone .input-file {
         background-color: white;
+    }
+
+.holizontal-button {
+    display: flex;
+}
+
+    .holizontal-button > button {
+        width: 150px;
     }
 
 .cover-zone {
@@ -107,7 +135,14 @@
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
+}
+
+.cover-right {
     justify-content: flex-end;
+}
+
+.cover-center {
+    justify-content: center;
 }
 
 #candidate-zone {
@@ -125,7 +160,7 @@
         white-space: nowrap;
     }
 
-        #candidate-zone table .table-numvber {
+        #candidate-zone table .table-number {
             text-align: center;
         }
 
@@ -141,3 +176,55 @@
     #candidate-zone tr:nth-child(even) {
         background: #efefef;
     }
+
+#winners-list-zone {
+    width: 750px;
+    max-width: 80%;
+    height: calc(100% - 50px);
+    background-color: white;
+    padding: 25px;
+    overflow: scroll;
+}
+
+    #winners-list-zone h3 {
+        text-align: center;
+        font-size: 50px;
+    }
+
+    #winners-list-zone table {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+        font-size: 30px;
+    }
+
+        #winners-list-zone table .table-center {
+            text-align: center;
+        }
+
+    #winners-list-zone th {
+        background: #ccc;
+    }
+
+    #winners-list-zone th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+    }
+
+#candidate-zone tr:nth-child(even) {
+    background: #efefef;
+}
+
+@media screen and (max-width: 767px) {
+    /* ここに横幅が767px以下の時に発動するスタイルを記述 */
+    .holizontal-button {
+        flex-direction: column;
+    }
+}
+
+@media screen and (min-width: 767px) {
+    /* ここに横幅が767pxより大きい時に発動するスタイルを記述 */
+    .holizontal-button {
+        flex-direction: row;
+    }
+}
