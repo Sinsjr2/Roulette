@@ -39,7 +39,7 @@ namespace Roulette.Pages
                     random,
                     elementHeight: State.ElementHeight,
                     slotRotateMaxSpeed: 250, 0, 1, 10,
-                    minCountOfRotation: 3,
+                    minCountOfRotation: 1,
                     maxCountOfRotation: 20,
                     displayHeight: State.ElementHeight * 3,
                     State.OriginalCandidateNumbers,

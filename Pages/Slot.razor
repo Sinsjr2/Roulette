@@ -28,33 +28,27 @@
         </div>
     </div>
     <div id="winner-zone">
-        @if (State.Winners.Any())
+        @if (State.LatestWinner is LotteryNumber winner)
         {
-            <marquee scrollamount="20">
-                <span>当選者：</span>
-                @foreach (var winner in State.Winners)
-                {
-                    <span>@winner.Number</span>
-                    <span>@winner.DisplayName さん</span>
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                }
-            </marquee>
+            <span>@winner.Number</span>
+            <span>@winner.DisplayName</span>
+            <span>さん</span>
         }
     </div>
 </div>
 <div id="button-zone">
     <button @onclick="() => Dispatcher.Dispatch(Singleton<OnClickStart>.Instance)">抽選開始</button>
-    <button @onclick="() => Dispatcher.Dispatch(Singleton<OnClickOpenCandidates>.Instance)">候補者確認</button>
+    <div class="holizontal-button">
+        <button class="tiny-button" @onclick="() => Dispatcher.Dispatch(Singleton<OnClickOpenWinners>.Instance)">当選者確認</button>
+        <button class="tiny-button" @onclick="() => Dispatcher.Dispatch(Singleton<OnClickOpenCandidates>.Instance)">候補者確認</button>
+    </div>
     <div class="input-file">
         <InputFile OnChange="LoadFile" />
     </div>
 </div>
 @if(State.VisibleCandidates)
 {
-    <div class="cover-zone" @onclick="() => Dispatcher.Dispatch(Singleton<OnClickCoverClose>.Instance)">
+    <div class="cover-zone cover-right" @onclick="() => Dispatcher.Dispatch(Singleton<OnClickCoverClose>.Instance)">
         <div id="candidate-zone">
             <h3>候補者一覧</h3>
             <table>
@@ -68,8 +62,33 @@
                     @foreach (var number in State.OriginalCandidateNumbers)
                     {
                         <tr>
-                            <td class="table-numvber">@number.Number</td>
+                            <td class="table-number">@number.Number</td>
                             <td>@number.DisplayName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+@if(State.VisibleWinners)
+{
+    <div class="cover-zone cover-center" @onclick="() => Dispatcher.Dispatch(Singleton<OnClickCoverClose>.Instance)">
+        <div id="winners-list-zone">
+            <h3>当選者一覧</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var number in State.Winners)
+                    {
+                        <tr>
+                            <td class="table-center">@number.Number</td>
+                            <td class="table-center">@number.DisplayName</td>
                         </tr>
                     }
                 </tbody>

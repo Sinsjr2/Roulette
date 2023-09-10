@@ -73,6 +73,12 @@ namespace Roulette.Models {
         public IReadOnlyList<LotteryNumber> Winners { get; private init; } = Array.Empty<LotteryNumber>();
 
         /// <summary>
+        /// 最新の当選者を表します。
+        /// ルーレット回転中は、nullになります。
+        /// </summary>
+        public LotteryNumber? LatestWinner { get; private init; }
+
+        /// <summary>
         /// スロット1つを表します。
         /// </summary>
         public IReadOnlyList<SlotModel> Slots { get; private init; }
@@ -99,7 +105,14 @@ namespace Roulette.Models {
         /// </summary>
         public int ElementHeight { get; private set; }
 
+        /// <summary>
+        /// 候補者一覧の表示非表示
+        /// </summary>
         public bool VisibleCandidates { get; private init; } = false;
+        /// <summary>
+        /// 当選者一覧の表示非表示
+        /// </summary>
+        public bool VisibleWinners { get; private set; } = false;
 
         public static readonly SlotPageModel Default = new();
 
@@ -251,13 +264,14 @@ namespace Roulette.Models {
         public SlotPageModel Update(ISlotPageMessage message) {
             return message switch {
                 OnStopSlotWithNumber msg => AddDecidedNumber(msg.Number),
-                    AddWinner(var winner) => this with { Winners = Winners.Append(winner).ToArray(), IsRunningSlot = false },
+                AddWinner(var winner) => this with { LatestWinner = winner,  Winners = Winners.Append(winner).ToArray(), IsRunningSlot = false },
                 OnStartSlot(var randomNum) => SelectRandomNumberAndStart(randomNum),
                 OnStopSlot => StopNextSlot(),
-                OnClickStart => this,
+                OnClickStart => this with { LatestWinner = null },
                 OnLoadCSVFile(var csvText) => SetCandidateNumbersFromCSVText(csvText),
                 OnClickOpenCandidates => this with { VisibleCandidates = true },
-                OnClickCoverClose => this with { VisibleCandidates = false },
+                OnClickOpenWinners => this with { VisibleWinners = true },
+                OnClickCoverClose => this with { VisibleCandidates = false, VisibleWinners = false },
                 _ => throw new ArgumentException(message?.ToString())
             };
         }
