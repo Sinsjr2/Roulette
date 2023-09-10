@@ -1,0 +1,231 @@
+/* /Pages/Slot.razor.rz.scp.css */
+button[b-iol5diif8g] {
+    display: block;
+    padding: 15px;
+    margin: 0 20px 20px 0;
+    text-align: center;
+    color: black;
+    text-decoration: none;
+    font-size: 20px;
+    background-color: lightgray;
+    border-radius: 100px;
+    border: none;
+    box-shadow: 0px 0px 50px lightgray;
+    cursor: pointer;
+}
+
+#full-zone[b-iol5diif8g] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr 200px;
+}
+
+#slot-zone[b-iol5diif8g] {
+    background-color: maroon;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#reel-zone[b-iol5diif8g] {
+    max-width: 100vw;
+    height: 75%;
+    background: linear-gradient(0deg, rgba(182,154,0,1) 0%, rgba(255,215,0,1) 10%, rgba(255,215,0,1) 40%, rgba(252,243,189,1) 48%, rgba(252,243,189,1) 52%, rgba(255,215,0,1) 60%, rgba(255,215,0,1) 90%, rgba(182,154,0,1) 100%);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.each-reel[b-iol5diif8g] {
+    background-color: white;
+    width: 300px;
+    height: 90%;
+    margin-inline: 1%;
+}
+
+    .each-reel:first-child[b-iol5diif8g] {
+        margin-inline-start: 2%;
+    }
+
+    .each-reel:last-child[b-iol5diif8g] {
+        margin-inline-end: 2%;
+    }
+
+.svg-wrap[b-iol5diif8g] {
+    position: relative;
+    width: 100%;
+    height: 100%
+}
+
+.svg-content[b-iol5diif8g] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(176,176,176,1) 4%, rgba(255,255,255,1) 20%, rgba(255,255,255,1) 80%, rgba(176,176,176,1) 96%, rgba(0,0,0,1) 100%);
+}
+
+#winner-zone[b-iol5diif8g] {
+    display: flex;
+    align-items: center;
+    background-color: black;
+    justify-content: center;
+}
+
+    #winner-zone span[b-iol5diif8g] {
+        color: white;
+        font-size: 85px;
+        margin-inline-end: 10px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-weight: bold;
+        animation-name: flash-b-iol5diif8g;
+        animation-duration: 1s;
+        animation-iteration-count: 3;
+    }
+
+@keyframes flash-b-iol5diif8g {
+    0%, 50%, 100% {
+        opacity: 0;
+    }
+
+    35% {
+        opacity: 1;
+    }
+
+    65% {
+        opacity: 1;
+    }
+}
+
+#button-zone[b-iol5diif8g] {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+    #button-zone > button[b-iol5diif8g] {
+        width: 200px;
+    }
+
+    #button-zone .input-file[b-iol5diif8g] {
+        background-color: white;
+    }
+
+.holizontal-button[b-iol5diif8g] {
+    display: flex;
+}
+
+    .holizontal-button > button[b-iol5diif8g] {
+        width: 150px;
+    }
+
+.cover-zone[b-iol5diif8g] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+}
+
+.cover-right[b-iol5diif8g] {
+    justify-content: flex-end;
+}
+
+.cover-center[b-iol5diif8g] {
+    justify-content: center;
+}
+
+#candidate-zone[b-iol5diif8g] {
+    width: 500px;
+    max-width: 80%;
+    height: calc(100% - 50px);
+    background-color: white;
+    padding: 25px;
+    overflow: scroll;
+}
+
+    #candidate-zone table[b-iol5diif8g] {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+    }
+
+        #candidate-zone table .table-number[b-iol5diif8g] {
+            text-align: center;
+        }
+
+    #candidate-zone th[b-iol5diif8g] {
+        background: #ccc;
+    }
+
+    #candidate-zone th[b-iol5diif8g], td[b-iol5diif8g] {
+        border: 1px solid #ccc;
+        padding: 8px;
+    }
+
+    #candidate-zone tr:nth-child(even)[b-iol5diif8g] {
+        background: #efefef;
+    }
+
+#winners-list-zone[b-iol5diif8g] {
+    width: 750px;
+    max-width: 80%;
+    height: calc(100% - 50px);
+    background-color: white;
+    padding: 25px;
+    overflow: scroll;
+}
+
+    #winners-list-zone h3[b-iol5diif8g] {
+        text-align: center;
+        font-size: 50px;
+    }
+
+    #winners-list-zone table[b-iol5diif8g] {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+        font-size: 30px;
+    }
+
+        #winners-list-zone table .table-center[b-iol5diif8g] {
+            text-align: center;
+        }
+
+    #winners-list-zone th[b-iol5diif8g] {
+        background: #ccc;
+    }
+
+    #winners-list-zone th[b-iol5diif8g], td[b-iol5diif8g] {
+        border: 1px solid #ccc;
+        padding: 8px;
+    }
+
+#candidate-zone tr:nth-child(even)[b-iol5diif8g] {
+    background: #efefef;
+}
+
+@media screen and (max-width: 767px) {
+    /* ここに横幅が767px以下の時に発動するスタイルを記述 */
+    .holizontal-button[b-iol5diif8g] {
+        flex-direction: column;
+    }
+}
+
+@media screen and (min-width: 767px) {
+    /* ここに横幅が767pxより大きい時に発動するスタイルを記述 */
+    .holizontal-button[b-iol5diif8g] {
+        flex-direction: row;
+    }
+}
